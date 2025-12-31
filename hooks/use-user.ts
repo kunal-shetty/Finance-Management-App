@@ -13,7 +13,6 @@ export function useUser() {
       const newUser: User = {
         id: `user-${Date.now()}`,
         fullName,
-        displayName,
         createdAt: new Date().toISOString(),
       }
       setUser(newUser)

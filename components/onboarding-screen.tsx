@@ -13,7 +13,6 @@ import { Sparkles } from "lucide-react"
 
 export function OnboardingScreen() {
   const [fullName, setFullName] = useState("")
-  const [displayName, setDisplayName] = useState("")
   const [error, setError] = useState("")
   const { createUser } = useUser()
 
@@ -23,7 +22,8 @@ export function OnboardingScreen() {
       setError("Please enter your full name")
       return
     }
-    createUser(fullName.trim(), displayName.trim() || undefined)
+    createUser(fullName.trim())
+    window.location.reload()
   }
 
   return (
@@ -52,13 +52,11 @@ export function OnboardingScreen() {
 
             <form onSubmit={handleSubmit} className="w-full space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-foreground">
-                  Full Name
-                </Label>
+                
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Enter your Name"
                   value={fullName}
                   onChange={(e) => {
                     setFullName(e.target.value)
@@ -68,20 +66,7 @@ export function OnboardingScreen() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="displayName" className="text-muted-foreground text-sm">
-                  Display Name (Optional)
-                </Label>
-                <Input
-                  id="displayName"
-                  type="text"
-                  placeholder="How should we call you?"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="bg-background/50"
-                />
-              </div>
-
+            
               {error && (
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-destructive">
                   {error}
