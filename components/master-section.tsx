@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AddCategoryModal } from "./add-category-modal"
 import { AddPaymentModeModal } from "./add-payment-mode-modal"
 import { AddTagModal } from "./add-tag-modal"
+import { DeleteConfirmationDialog } from "./delete-confirmation-dialog"
 
 export function MasterSection() {
   const { categories, paymentModes, tags, deleteCategory, deletePaymentMode, deleteTag } = useMasters()
@@ -17,23 +18,48 @@ export function MasterSection() {
   const [showAddCategory, setShowAddCategory] = useState(false)
   const [showAddPaymentMode, setShowAddPaymentMode] = useState(false)
   const [showAddTag, setShowAddTag] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [deleteType, setDeleteType] = useState<"category" | "paymentMode" | "tag">("category")
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; name: string } | null>(null)
 
-  const handleDeleteCategory = (id: string) => {
-    if (confirm("Are you sure you want to delete this category?")) {
-      deleteCategory(id)
-    }
+  const capitalize = (str: string) => {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  const handleDeletePaymentMode = (id: string) => {
-    if (confirm("Are you sure you want to delete this payment mode?")) {
-      deletePaymentMode(id)
-    }
+  const handleDeleteCategory = (id: string, name: string) => {
+    setItemToDelete({ id, name })
+    setDeleteType("category")
+    setDeleteConfirmOpen(true)
   }
 
-  const handleDeleteTag = (id: string) => {
-    if (confirm("Are you sure you want to delete this tag?")) {
-      deleteTag(id)
+  const handleDeletePaymentMode = (id: string, name: string) => {
+    setItemToDelete({ id, name })
+    setDeleteType("paymentMode")
+    setDeleteConfirmOpen(true)
+  }
+
+  const handleDeleteTag = (id: string, name: string) => {
+    setItemToDelete({ id, name })
+    setDeleteType("tag")
+    setDeleteConfirmOpen(true)
+  }
+
+  const confirmDelete = () => {
+    if (!itemToDelete) return
+
+    switch (deleteType) {
+      case "category":
+        deleteCategory(itemToDelete.id)
+        break
+      case "paymentMode":
+        deletePaymentMode(itemToDelete.id)
+        break
+      case "tag":
+        deleteTag(itemToDelete.id)
+        break
     }
+    setItemToDelete(null)
   }
 
   return (
@@ -43,7 +69,7 @@ export function MasterSection() {
       <Tabs defaultValue="categories" className="w-full">
         <TabsList className="grid w-full grid-cols-3 max-w-md">
           <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="payment-modes">Payment Modes</TabsTrigger>
+          <TabsTrigger value="payment-modes">Modes</TabsTrigger>
           <TabsTrigger value="tags">Tags</TabsTrigger>
         </TabsList>
 
@@ -65,7 +91,7 @@ export function MasterSection() {
                       <p className="font-medium text-foreground">{cat.name}</p>
                       {cat.type && cat.type !== "both" && (
                         <Badge variant="outline" className="text-xs mt-1">
-                          {cat.type}
+                          {capitalize(cat.type)}
                         </Badge>
                       )}
                     </div>
@@ -74,7 +100,7 @@ export function MasterSection() {
                     size="icon"
                     variant="ghost"
                     className="h-8 w-8 text-destructive hover:text-destructive"
-                    onClick={() => handleDeleteCategory(cat.id)}
+                    onClick={() => handleDeleteCategory(cat.id, cat.name)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -101,7 +127,7 @@ export function MasterSection() {
                     size="icon"
                     variant="ghost"
                     className="h-8 w-8 text-destructive hover:text-destructive"
-                    onClick={() => handleDeletePaymentMode(mode.id)}
+                    onClick={() => handleDeletePaymentMode(mode.id, mode.name)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -129,7 +155,7 @@ export function MasterSection() {
                 <div key={tag.id} className="flex items-center gap-2 bg-card rounded-lg px-3 py-2 border border-border">
                   <Badge variant="secondary">{tag.name}</Badge>
                   <button
-                    onClick={() => handleDeleteTag(tag.id)}
+                    onClick={() => handleDeleteTag(tag.id, tag.name)}
                     className="text-muted-foreground hover:text-destructive"
                   >
                     <Trash2 className="w-3 h-3" />
@@ -144,6 +170,14 @@ export function MasterSection() {
       <AddCategoryModal isOpen={showAddCategory} onClose={() => setShowAddCategory(false)} />
       <AddPaymentModeModal isOpen={showAddPaymentMode} onClose={() => setShowAddPaymentMode(false)} />
       <AddTagModal isOpen={showAddTag} onClose={() => setShowAddTag(false)} />
+
+      <DeleteConfirmationDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        title={`Delete ${deleteType === "category" ? "Category" : deleteType === "paymentMode" ? "Payment Mode" : "Tag"}`}
+        description={`Are you sure you want to delete "${itemToDelete?.name}"? This action cannot be undone.`}
+      />
     </div>
   )
 }

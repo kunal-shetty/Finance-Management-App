@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowDown, ArrowUp, Search, Edit2, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import { EditTransactionModal } from "./edit-transaction-modal"
+import { DeleteConfirmationDialog } from "./delete-confirmation-dialog"
 import type { Transaction } from "@/lib/types"
 
 export function TransactionsList() {
@@ -24,6 +25,8 @@ export function TransactionsList() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [paymentModeFilter, setPaymentModeFilter] = useState<string>("all")
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [transactionToDelete, setTransactionToDelete] = useState<string | null>(null)
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((txn) => {
@@ -56,8 +59,14 @@ export function TransactionsList() {
   }, [filteredTransactions])
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this transaction?")) {
-      deleteTransaction(id)
+    setTransactionToDelete(id)
+    setDeleteConfirmOpen(true)
+  }
+
+  const confirmDelete = () => {
+    if (transactionToDelete) {
+      deleteTransaction(transactionToDelete)
+      setTransactionToDelete(null)
     }
   }
 
@@ -129,9 +138,8 @@ export function TransactionsList() {
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-start gap-3 flex-1">
                             <div
-                              className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                txn.type === "income" ? "bg-secondary/10" : "bg-destructive/10"
-                              }`}
+                              className={`w-10 h-10 rounded-full flex items-center justify-center ${txn.type === "income" ? "bg-secondary/10" : "bg-destructive/10"
+                                }`}
                             >
                               {txn.type === "income" ? (
                                 <ArrowDown className="w-5 h-5 text-secondary" />
@@ -202,6 +210,14 @@ export function TransactionsList() {
           onClose={() => setEditingTransaction(null)}
         />
       )}
+
+      <DeleteConfirmationDialog
+        isOpen={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Transaction"
+        description="Are you sure you want to delete this transaction? This action cannot be undone."
+      />
     </div>
   )
 }

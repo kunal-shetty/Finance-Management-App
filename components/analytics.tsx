@@ -83,16 +83,16 @@ export function Analytics() {
   }, [monthlyData, categoryBreakdown])
 
   return (
-    <div className="p-4 lg:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
       <h2 className="text-3xl font-semibold text-foreground">Analytics</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Expense Trend</p>
               <p className="text-2xl font-semibold text-foreground">{Math.abs(insights.expenseChange).toFixed(1)}%</p>
-              <p className="text-xs text-muted-foreground">vs last month</p>
+              <p className="text-xs text-muted-foreground">vs Last Month</p>
             </div>
             {insights.expenseChange > 0 ? (
               <TrendingUp className="w-8 h-8 text-destructive" />
@@ -102,64 +102,66 @@ export function Analytics() {
           </div>
         </Card>
 
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Savings Rate</p>
             <p className="text-2xl font-semibold text-foreground">{insights.savingsRate.toFixed(1)}%</p>
-            <p className="text-xs text-muted-foreground">of your income</p>
+            <p className="text-xs text-muted-foreground">of Your Income</p>
           </div>
         </Card>
 
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Top Spending Category</p>
             <p className="text-2xl font-semibold text-foreground">{insights.topCategory}</p>
-            <p className="text-xs text-muted-foreground">this month</p>
+            <p className="text-xs text-muted-foreground">This Month</p>
           </div>
         </Card>
       </div>
 
-      <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Income vs Expenses (Last 6 Months)</h3>
-        <ResponsiveContainer width="100%" height={300}>
+      <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4">Income vs Expenses (Last 6 Months)</h3>
+        <ResponsiveContainer width="100%" height={200} className="sm:h-[300px]">
           <BarChart data={monthlyData}>
-            <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-            <YAxis stroke="hsl(var(--muted-foreground))" />
+            <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
+            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
             <Tooltip
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",
                 borderRadius: "0.5rem",
+                color: "hsl(var(--foreground))",
               }}
             />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: "12px", color: "hsl(var(--foreground))" }} />
             <Bar dataKey="income" fill="hsl(var(--secondary))" name="Income" radius={[8, 8, 0, 0]} />
             <Bar dataKey="expenses" fill="hsl(var(--destructive))" name="Expenses" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </Card>
 
-      <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Savings Trend</h3>
-        <ResponsiveContainer width="100%" height={250}>
+      <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4">Savings Trend</h3>
+        <ResponsiveContainer width="100%" height={180} className="sm:h-[250px]">
           <LineChart data={monthlyData}>
-            <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-            <YAxis stroke="hsl(var(--muted-foreground))" />
+            <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
+            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
             <Tooltip
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",
                 borderRadius: "0.5rem",
+                color: "hsl(var(--foreground))",
               }}
             />
-            <Line type="monotone" dataKey="savings" stroke="hsl(var(--primary))" strokeWidth={3} dot={{ r: 5 }} />
+            <Line type="monotone" dataKey="savings" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
           </LineChart>
         </ResponsiveContainer>
       </Card>
 
       {categoryBreakdown.length > 0 && (
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Category Breakdown (This Month)</h3>
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4">Category Breakdown (This Month)</h3>
           <div className="space-y-3">
             {categoryBreakdown.map((cat) => {
               const total = categoryBreakdown.reduce((sum, c) => sum + c.amount, 0)

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { useTransactions } from "@/hooks/use-transactions"
 import { useMasters } from "@/hooks/use-masters"
 import type { Transaction } from "@/lib/types"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -80,13 +80,13 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Edit Transaction</DialogTitle>
-        </DialogHeader>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4">
+        <SheetHeader>
+          <SheetTitle>Edit Transaction</SheetTitle>
+        </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="flex gap-2">
             <button
               type="button"
@@ -94,11 +94,10 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
                 setType("expense")
                 setCategoryId("")
               }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
-                type === "expense"
-                  ? "bg-destructive/10 text-destructive border-2 border-destructive"
-                  : "bg-muted text-muted-foreground"
-              }`}
+              className={`flex-1 py-3 rounded-lg font-medium transition-colors ${type === "expense"
+                ? "bg-destructive/10 text-destructive border-2 border-destructive"
+                : "bg-muted text-muted-foreground"
+                }`}
             >
               Expense
             </button>
@@ -108,11 +107,10 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
                 setType("income")
                 setCategoryId("")
               }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
-                type === "income"
-                  ? "bg-secondary/10 text-secondary border-2 border-secondary"
-                  : "bg-muted text-muted-foreground"
-              }`}
+              className={`flex-1 py-3 rounded-lg font-medium transition-colors ${type === "income"
+                ? "bg-secondary/10 text-secondary border-2 border-secondary"
+                : "bg-muted text-muted-foreground"
+                }`}
             >
               Income
             </button>
@@ -126,14 +124,14 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="text-lg"
+              className="text-lg h-12"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="edit-category">Category</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger id="edit-category">
+              <SelectTrigger id="edit-category" className="h-12">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -152,7 +150,7 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
           <div className="space-y-2">
             <Label htmlFor="edit-paymentMode">Payment Mode</Label>
             <Select value={paymentModeId} onValueChange={setPaymentModeId}>
-              <SelectTrigger id="edit-paymentMode">
+              <SelectTrigger id="edit-paymentMode" className="h-12">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -167,23 +165,23 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
 
           <div className="space-y-2">
             <Label htmlFor="edit-date">Date</Label>
-            <Input id="edit-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input id="edit-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12" />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-notes">Notes</Label>
+            <Label htmlFor="edit-notes">Notes (Optional)</Label>
             <Textarea id="edit-notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} />
           </div>
 
           {tags.length > 0 && (
             <div className="space-y-2">
-              <Label>Tags</Label>
+              <Label>Tags (Optional)</Label>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <Badge
                     key={tag.id}
                     variant={selectedTags.includes(tag.id) ? "default" : "outline"}
-                    className="cursor-pointer"
+                    className="cursor-pointer h-9 px-3"
                     onClick={() => toggleTag(tag.id)}
                   >
                     {tag.name}
@@ -195,16 +193,16 @@ export function EditTransactionModal({ transaction, isOpen, onClose }: EditTrans
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <div className="flex gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+          <div className="flex gap-2 pt-2 pb-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-12 bg-transparent">
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 h-12">
               Save Changes
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   )
 }

@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useMasters } from "@/hooks/use-masters"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -51,13 +51,13 @@ export function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Add Category</DialogTitle>
-        </DialogHeader>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4">
+        <SheetHeader>
+          <SheetTitle>Add Category</SheetTitle>
+        </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
             <Label htmlFor="cat-name">Category Name</Label>
             <Input
@@ -68,6 +68,7 @@ export function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
                 setName(e.target.value)
                 setError("")
               }}
+              className="h-12"
             />
           </div>
 
@@ -75,19 +76,19 @@ export function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
             <Label>Type</Label>
             <RadioGroup value={type} onValueChange={(value: any) => setType(value)} className="flex gap-4">
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="expense" id="expense" />
+                <RadioGroupItem value="expense" id="expense" className="h-5 w-5" />
                 <Label htmlFor="expense" className="font-normal">
                   Expense
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="income" id="income" />
+                <RadioGroupItem value="income" id="income" className="h-5 w-5" />
                 <Label htmlFor="income" className="font-normal">
                   Income
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="both" id="both" />
+                <RadioGroupItem value="both" id="both" className="h-5 w-5" />
                 <Label htmlFor="both" className="font-normal">
                   Both
                 </Label>
@@ -97,15 +98,14 @@ export function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
 
           <div className="space-y-2">
             <Label>Color</Label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {PRESET_COLORS.map((c) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setColor(c)}
-                  className={`w-8 h-8 rounded-full transition-transform ${
-                    color === c ? "scale-110 ring-2 ring-primary ring-offset-2" : ""
-                  }`}
+                  className={`w-12 h-12 rounded-full transition-transform ${color === c ? "scale-110 ring-2 ring-primary ring-offset-2" : ""
+                    }`}
                   style={{ backgroundColor: c }}
                 />
               ))}
@@ -114,16 +114,16 @@ export function AddCategoryModal({ isOpen, onClose }: AddCategoryModalProps) {
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <div className="flex gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+          <div className="flex gap-2 pt-2 pb-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-12 bg-transparent">
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 h-12">
               Add Category
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   )
 }

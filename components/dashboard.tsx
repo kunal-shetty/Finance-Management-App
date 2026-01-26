@@ -88,10 +88,10 @@ export function Dashboard({ user }: DashboardProps) {
   }, [transactions, categories, currentMonth])
 
   return (
-    <div className="p-4 lg:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
-        <h2 className="text-3xl font-semibold text-foreground">Welcome back, {user.displayName || user.fullName}</h2>
-        <p className="text-muted-foreground">{"Here's your financial overview for this month"}</p>
+        <h2 className="text-3xl font-semibold text-foreground">Welcome Back, {user.displayName || user.fullName}</h2>
+        <p className="text-muted-foreground">{"Here's Your Financial Overview for This Month"}</p>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -99,64 +99,66 @@ export function Dashboard({ user }: DashboardProps) {
           icon={ArrowDown}
           label="Total Income"
           value={`${settings.currency}${stats.income.toFixed(2)}`}
-          color="text-secondary"
-          bgColor="bg-secondary/10"
+          iconColor="text-secondary"
+          iconBg="bg-secondary/10"
         />
         <StatsCard
           icon={ArrowUp}
           label="Total Expenses"
           value={`${settings.currency}${stats.expenses.toFixed(2)}`}
-          color="text-destructive"
-          bgColor="bg-destructive/10"
+          iconColor="text-destructive"
+          iconBg="bg-destructive/10"
         />
         <StatsCard
           icon={Wallet}
           label="Balance"
           value={`${settings.currency}${stats.balance.toFixed(2)}`}
-          color="text-primary"
-          bgColor="bg-primary/10"
+          iconColor="text-primary"
+          iconBg="bg-primary/10"
         />
         <StatsCard
           icon={TrendingUp}
           label="Savings Rate"
           value={`${stats.savings.toFixed(1)}%`}
-          color="text-accent"
-          bgColor="bg-accent/10"
+          iconColor="text-primary"
+          iconBg="bg-primary/10"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Cash Flow (Last 7 Days)</h3>
-          <ResponsiveContainer width="100%" height={200}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4">Cash Flow (Last 7 Days)</h3>
+          <ResponsiveContainer width="100%" height={150} className="sm:h-[200px]">
             <LineChart data={cashFlowData}>
-              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} className="sm:text-xs" />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "hsl(var(--card))",
                   border: "1px solid hsl(var(--border))",
                   borderRadius: "0.5rem",
+                  color: "hsl(var(--foreground))",
                 }}
               />
-              <Line type="monotone" dataKey="balance" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="balance" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
         </Card>
 
-        <Card className="p-6 backdrop-blur-sm bg-card/80 border-border/50">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Top Spending Categories</h3>
+        <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4">Top Spending Categories</h3>
           {categoryData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={150} className="sm:h-[200px]">
               <PieChart>
                 <Pie
                   data={categoryData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={50}
-                  outerRadius={80}
+                  innerRadius={40}
+                  outerRadius={65}
                   paddingAngle={5}
                   dataKey="value"
+                  className="sm:inner-radius-50 sm:outer-radius-80"
                 >
                   {categoryData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -172,7 +174,7 @@ export function Dashboard({ user }: DashboardProps) {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-[200px] flex items-center justify-center text-muted-foreground">No expense data yet</div>
+            <div className="h-[150px] sm:h-[200px] flex items-center justify-center text-muted-foreground">No Expense Data Yet</div>
           )}
         </Card>
       </div>
@@ -184,21 +186,21 @@ interface StatsCardProps {
   icon: React.ElementType
   label: string
   value: string
-  color: string
-  bgColor: string
+  iconColor: string
+  iconBg: string
 }
 
-function StatsCard({ icon: Icon, label, value, color, bgColor }: StatsCardProps) {
+function StatsCard({ icon: Icon, label, value, iconColor, iconBg }: StatsCardProps) {
   return (
     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} whileHover={{ y: -2 }}>
-      <Card className="p-4 backdrop-blur-sm bg-card/80 border-border/50 hover:shadow-md transition-shadow">
+      <Card className="p-4 sm:p-6 backdrop-blur-sm bg-card/80 border-border/50 hover:shadow-md transition-shadow">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">{label}</p>
             <p className="text-2xl font-semibold text-foreground">{value}</p>
           </div>
-          <div className={`w-10 h-10 rounded-full ${bgColor} flex items-center justify-center`}>
-            <Icon className={`w-5 h-5 ${color}`} />
+          <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center`}>
+            <Icon className={`w-5 h-5 ${iconColor}`} />
           </div>
         </div>
       </Card>

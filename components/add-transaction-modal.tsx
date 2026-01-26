@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { useTransactions } from "@/hooks/use-transactions"
 import { useMasters } from "@/hooks/use-masters"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -77,13 +77,13 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Add Transaction</DialogTitle>
-        </DialogHeader>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4">
+        <SheetHeader>
+          <SheetTitle>Add Transaction</SheetTitle>
+        </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="flex gap-2">
             <button
               type="button"
@@ -91,11 +91,10 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
                 setType("expense")
                 setCategoryId("")
               }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
-                type === "expense"
+              className={`flex-1 py-3 rounded-lg font-medium transition-colors ${type === "expense"
                   ? "bg-destructive/10 text-destructive border-2 border-destructive"
                   : "bg-muted text-muted-foreground"
-              }`}
+                }`}
             >
               Expense
             </button>
@@ -105,11 +104,10 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
                 setType("income")
                 setCategoryId("")
               }}
-              className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
-                type === "income"
+              className={`flex-1 py-3 rounded-lg font-medium transition-colors ${type === "income"
                   ? "bg-secondary/10 text-secondary border-2 border-secondary"
                   : "bg-muted text-muted-foreground"
-              }`}
+                }`}
             >
               Income
             </button>
@@ -124,14 +122,14 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="text-lg"
+              className="text-lg h-12"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger id="category">
+              <SelectTrigger id="category" className="h-12">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
@@ -150,7 +148,7 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
           <div className="space-y-2">
             <Label htmlFor="paymentMode">Payment Mode</Label>
             <Select value={paymentModeId} onValueChange={setPaymentModeId}>
-              <SelectTrigger id="paymentMode">
+              <SelectTrigger id="paymentMode" className="h-12">
                 <SelectValue placeholder="Select payment mode" />
               </SelectTrigger>
               <SelectContent>
@@ -165,7 +163,7 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
 
           <div className="space-y-2">
             <Label htmlFor="date">Date</Label>
-            <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-12" />
           </div>
 
           <div className="space-y-2">
@@ -187,7 +185,7 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
                   <Badge
                     key={tag.id}
                     variant={selectedTags.includes(tag.id) ? "default" : "outline"}
-                    className="cursor-pointer"
+                    className="cursor-pointer h-9 px-3"
                     onClick={() => toggleTag(tag.id)}
                   >
                     {tag.name}
@@ -210,16 +208,16 @@ export function AddTransactionModal({ isOpen, onClose }: AddTransactionModalProp
             )}
           </AnimatePresence>
 
-          <div className="flex gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+          <div className="flex gap-2 pt-2 pb-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-12 bg-transparent">
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 h-12">
               Add Transaction
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   )
 }

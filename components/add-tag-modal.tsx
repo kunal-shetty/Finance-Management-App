@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useMasters } from "@/hooks/use-masters"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -33,13 +33,13 @@ export function AddTagModal({ isOpen, onClose }: AddTagModalProps) {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Add Tag</DialogTitle>
-        </DialogHeader>
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4">
+        <SheetHeader>
+          <SheetTitle>Add Tag</SheetTitle>
+        </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
             <Label htmlFor="tag-name">Tag Name</Label>
             <Input
@@ -50,21 +50,22 @@ export function AddTagModal({ isOpen, onClose }: AddTagModalProps) {
                 setName(e.target.value)
                 setError("")
               }}
+              className="h-12"
             />
           </div>
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <div className="flex gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+          <div className="flex gap-2 pt-2 pb-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1 h-12 bg-transparent">
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 h-12">
               Add Tag
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   )
 }
